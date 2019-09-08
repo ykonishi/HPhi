@@ -262,8 +262,7 @@ double complex child_GC_Cis_MPI
  double complex *tmp_v0,
  double complex *tmp_v1,
  unsigned long int idim_max,
- double complex *tmp_v1buf,
- unsigned long int *Tpow
+ double complex *tmp_v1buf
  );
 
 double complex child_GC_Ajt_MPI
@@ -274,8 +273,7 @@ double complex child_GC_Ajt_MPI
  double complex *tmp_v0,
  double complex *tmp_v1,
  unsigned long int idim_max,
- double complex *tmp_v1buf,
- long unsigned int *Tpow
+ double complex *tmp_v1buf
  );
 
 double complex child_Cis_MPI
@@ -287,7 +285,6 @@ double complex child_Cis_MPI
  double complex *tmp_v1,
  double complex *tmp_v1buf,
  unsigned long int idim_max,
- long unsigned int *Tpow,
  long unsigned int *list_1_org,
  long unsigned int *list_1buf_org,
  long unsigned int *list_2_1_target,
@@ -306,7 +303,6 @@ double complex child_Ajt_MPI
  double complex *tmp_v1,
  double complex *tmp_v1buf,
  unsigned long int idim_max,
- long unsigned int *Tpow,
  long unsigned int *list_1_org,
  long unsigned int *list_1buf_org,
  long unsigned int *list_2_1_target,

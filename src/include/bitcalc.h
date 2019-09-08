@@ -105,8 +105,7 @@ int GetLocal2Sz
 (
  const unsigned int isite,
  const long unsigned int org_bit,
- const long int *SiteToBit,
- const long unsigned int *Tpow
+ const long int *SiteToBit
  );
 
 int ConvertToList1GeneralSpin(

@@ -331,7 +331,6 @@ double complex child_CisAit_spin_MPIdouble
  double complex *tmp_v1, /**< [in] v0 = H v1*/
  double complex *tmp_v1buf,
  unsigned long int idim_max,
- long unsigned int *Tpow,
  long unsigned int *list_1_org,
  long unsigned int *list_1buf_org,
  long unsigned int *list_2_1_target,

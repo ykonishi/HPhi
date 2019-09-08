@@ -53,8 +53,8 @@ void setmem_def
  struct BindStruct *X,
  struct BoostList *xBoost
  ) {
-  X->Def.Tpow = lui_1d_allocate(2 * X->Def.Nsite + 2);
-  X->Def.OrgTpow = lui_1d_allocate(2 * X->Def.Nsite + 2);
+  //X->Def.Tpow = lui_1d_allocate(2 * X->Def.Nsite + 2);
+  //X->Def.OrgTpow = lui_1d_allocate(2 * X->Def.Nsite + 2);
   X->Def.SiteToBit = li_1d_allocate(X->Def.Nsite + 1);
   X->Def.LocSpn = i_1d_allocate(X->Def.Nsite);
   X->Phys.spin_real_cor = d_1d_allocate(X->Def.Nsite * X->Def.Nsite);
@@ -301,10 +301,10 @@ int setmem_large
           X->Large.SizeOflistjb = X->Check.sdim + 2;
         } else {//for spin-canonical general spin
           X->Large.SizeOflist_2_1 = X->Check.sdim + 2;
-          X->Large.SizeOflist_2_2 =
-                  X->Def.Tpow[X->Def.Nsite - 1] * X->Def.SiteToBit[X->Def.Nsite - 1] / X->Check.sdim + 2;
-          X->Large.SizeOflistjb =
-                  X->Def.Tpow[X->Def.Nsite - 1] * X->Def.SiteToBit[X->Def.Nsite - 1] / X->Check.sdim + 2;
+          X->Large.SizeOflist_2_2 = (1LU << (X->Def.Nsite - 1)) * X->Def.SiteToBit[X->Def.Nsite - 1] /X->Check.sdim + 2;
+          //X->Def.Tpow[X->Def.Nsite - 1] * X->Def.SiteToBit[X->Def.Nsite - 1] / X->Check.sdim + 2;
+          X->Large.SizeOflistjb = (1LU << (X->Def.Nsite - 1)) * X->Def.SiteToBit[X->Def.Nsite - 1] /X->Check.sdim + 2;
+          //X->Def.Tpow[X->Def.Nsite - 1] * X->Def.SiteToBit[X->Def.Nsite - 1] / X->Check.sdim + 2;
         }
         break;
       default:

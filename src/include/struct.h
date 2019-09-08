@@ -87,10 +87,10 @@ struct DefineList {
   int iFlgSzConserved;/**<@brief Flag whether Sz is conserved.*/
 
   int fidx;/**<@brief Always 0, it is not used ???*/
-  long unsigned int *Tpow;/**<@brief [2 * DefineList::NsiteMPI] @f$2^n@f$
-                          malloc in setmem_def().*/
-  long unsigned int *OrgTpow;/**<@brief [2 * DefineList::NsiteMPI] @f$2^n@f$
-                             malloc in setmem_def().*/
+  //long unsigned int *Tpow;/**<@brief [2 * DefineList::NsiteMPI] @f$2^n@f$
+   //                       malloc in setmem_def().*/
+  //long unsigned int *OrgTpow;/**<@brief [2 * DefineList::NsiteMPI] @f$2^n@f$
+     //                        malloc in setmem_def().*/
   long int *SiteToBit;/**<@brief [DefineList::NsiteMPI] Similar to DefineList::Tpow.
                       For general spin.*/
 

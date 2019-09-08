@@ -102,11 +102,11 @@ int sz
   long int *list_2_2_Sz = NULL;
   if(X->Def.iFlgGeneralSpin==TRUE){
     list_2_1_Sz = li_1d_allocate(X->Check.sdim+2);
-    list_2_2_Sz = li_1d_allocate((X->Def.Tpow[X->Def.Nsite-1]*X->Def.SiteToBit[X->Def.Nsite-1]/X->Check.sdim)+2);
+    list_2_2_Sz = li_1d_allocate(((1LU <<(X->Def.Nsite-1))*X->Def.SiteToBit[X->Def.Nsite-1]/X->Check.sdim)+2);
     for(j=0; j<X->Check.sdim+2;j++){
       list_2_1_Sz[j]=0;
       }
-    for(j=0; j< (X->Def.Tpow[X->Def.Nsite-1]*X->Def.SiteToBit[X->Def.Nsite-1]/X->Check.sdim)+2; j++){
+    for(j=0; j< ((1LU<<(X->Def.Nsite-1))*X->Def.SiteToBit[X->Def.Nsite-1]/X->Check.sdim)+2; j++){
       list_2_2_Sz[j]=0;
     }
   }
@@ -215,15 +215,15 @@ int sz
     TimeKeeper(X, cFileNameTimeKeep, cOMPSzStart, "a");
     switch(X->Def.iCalcModel){
     case HubbardGC:
-      icnt = X->Def.Tpow[2*X->Def.Nsite-1]*2+0;/*Tpow[2*X->Def.Nsit]=1*/
+      icnt = (1LU << (X->Def.Nsite-1))*2+0;/*[2*X->Def.Nsit]=1*/
       break;
       
     case SpinGC:
       if(X->Def.iFlgGeneralSpin==FALSE){
-        icnt = X->Def.Tpow[X->Def.Nsite-1]*2+0;/*Tpow[X->Def.Nsit]=1*/
+        icnt = ( 1LU << (X->Def.Nsite-1))*2+0;/*[X->Def.Nsit]=1*/
       }
       else{
-        icnt = X->Def.Tpow[X->Def.Nsite-1]*X->Def.SiteToBit[X->Def.Nsite-1];
+        icnt = (1LU << (X->Def.Nsite-1))*X->Def.SiteToBit[X->Def.Nsite-1];
       }
       break;
       
@@ -242,10 +242,10 @@ int sz
         i=ib*ihfbit;
         icheck_loc=1;
         for(j=(X->Def.Nsite+1)/2; j< X->Def.Nsite ;j++){
-          div_up    = i & X->Def.Tpow[2*j];
-          div_up    = div_up/X->Def.Tpow[2*j];
-          div_down  = i & X->Def.Tpow[2*j+1];
-          div_down  = div_down/X->Def.Tpow[2*j+1];
+          div_up    = i & (1LU << (2*j));
+          div_up    = div_up/(1LU << (2*j));
+          div_down  = i & (1LU << (2*j+1));
+          div_down  = div_down/(1LU << (2*j+1));
           if(X->Def.LocSpn[j] != ITINERANT){
             if(X->Def.Nsite%2==1 && j==(X->Def.Nsite/2)){
               icheck_loc= icheck_loc;
@@ -257,9 +257,9 @@ int sz
         }
         if(icheck_loc == 1){
           if(X->Def.Nsite%2==1 && X->Def.LocSpn[X->Def.Nsite/2] != ITINERANT){
-            jb +=X->Def.Tpow[X->Def.Nsite-1-(X->Def.NLocSpn-num_loc)];
+            jb +=(1LU << (X->Def.Nsite-1-(X->Def.NLocSpn-num_loc)));
           }else{
-            jb +=X->Def.Tpow[X->Def.Nsite-(X->Def.NLocSpn-num_loc)];
+            jb +=(1LU << (X->Def.Nsite-(X->Def.NLocSpn-num_loc)));
           }
         }
       }
@@ -282,14 +282,14 @@ int sz
           //[s] counting # of up and down electrons
           num_up      = 0;
           for(j=0;j<=N2-2;j+=2){ // even -> up spin
-            div=i & X->Def.Tpow[j];
-            div=div/X->Def.Tpow[j];
+            div=i & (1LU << j);
+            div=div/(1LU << j);
             num_up+=div;
           }
           num_down=0;
           for(j=1;j<=N2-1;j+=2){ // odd -> down spin
-            div=i & X->Def.Tpow[j];
-            div=div/X->Def.Tpow[j];
+            div=i & (1LU << j);
+            div=div/(1LU << j);
             num_down+=div;
           }
           //[e] counting # of up and down electrons
@@ -321,14 +321,14 @@ int sz
           i=ib*ihfbit;
           num_up=0;
           for(j=0;j<=N2-2;j+=2){
-            div=i & X->Def.Tpow[j];
-            div=div/X->Def.Tpow[j];
+            div=i & (1LU << j);
+            div=div/(1LU << j);
             num_up+=div;
           }
           num_down=0;
           for(j=1;j<=N2-1;j+=2){
-            div=i & X->Def.Tpow[j];
-            div=div/X->Def.Tpow[j];
+            div=i & (1LU << j);
+            div=div/(1LU << j);
             num_down+=div;
           }
 
@@ -374,14 +374,14 @@ int sz
           i=ib*ihfbit;
           num_up=0;
           for(j=0;j<=N2-2;j+=2){
-            div=i & X->Def.Tpow[j];
-            div=div/X->Def.Tpow[j];
+            div=i & (1LU << j);
+            div=div/(1LU << j);
             num_up+=div;
           }
           num_down=0;
           for(j=1;j<=N2-1;j+=2){
-            div=i & X->Def.Tpow[j];
-            div=div/X->Def.Tpow[j];
+            div=i & (1LU << j);
+            div=div/(1LU << j);
             num_down+=div;
           }
           tmp_res  = X->Def.Nsite%2; // even Ns-> 0, odd Ns -> 1
@@ -420,14 +420,14 @@ int sz
           i=ib*ihfbit;
           num_up=0;
           for(j=0;j<=N2-2;j+=2){
-            div=i & X->Def.Tpow[j];
-            div=div/X->Def.Tpow[j];
+            div=i & (1LU << j);
+            div=div/(1LU << j);
             num_up+=div;
           }
           num_down=0;
           for(j=1;j<=N2-1;j+=2){
-            div=i & X->Def.Tpow[j];
-            div=div/X->Def.Tpow[j];
+            div=i & (1LU << j);
+            div=div/(1LU << j);
             num_down+=div;
           }
           tmp_res  = X->Def.Nsite%2; // even Ns-> 0, odd Ns -> 1
@@ -479,10 +479,10 @@ int sz
         icheck_loc  = 1;
 
         for(j=X->Def.Nsite/2; j< X->Def.Nsite ;j++){
-          div_up    = i & X->Def.Tpow[2*j];
-          div_up    = div_up/X->Def.Tpow[2*j];
-          div_down  = i & X->Def.Tpow[2*j+1];
-          div_down  = div_down/X->Def.Tpow[2*j+1];
+          div_up    = i & (1LU << 2*j);
+          div_up    = div_up/(1LU << 2*j);
+          div_down  = i & (1LU << 2*j+1);
+          div_down  = div_down/(1LU << 2*j+1);
           if(X->Def.LocSpn[j] == ITINERANT){
             num_up   += div_up;        
             num_down += div_down;  
@@ -564,11 +564,11 @@ int sz
           tmp_i   = 0;
           jb      = 0;
           ja      = 0;
-          while(tmp_pow < X->Def.Tpow[X->Def.Ne]){
+          while(tmp_pow < (1LU << (X->Def.Ne))){
             tmp_i   += tmp_pow;
             tmp_pow  = tmp_pow*2;
           }
-          //printf("DEBUG: %ld %ld %ld %ld\n",tmp_i,X->Check.sdim,X->Def.Tpow[X->Def.Ne],X->Def.Nsite);
+          //printf("DEBUG: %ld %ld %ld %ld\n",tmp_i,X->Check.sdim,(1LU << X->Def.Ne,X->Def.Nsite);
           if(X->Def.Nsite%2==0){
             max_tmp_i = X->Check.sdim*X->Check.sdim;
           }else{
@@ -603,8 +603,8 @@ int sz
             i=ib*ihfbit;
             num_up=0;
             for(j=0;j<N; j++){
-              div_up = i & X->Def.Tpow[j];
-              div_up = div_up/X->Def.Tpow[j];
+              div_up = i & (1LU << j);
+              div_up = div_up/(1LU << j);
               num_up +=div_up;
             }
             all_up   = (X->Def.Nsite+1)/2;
@@ -629,8 +629,8 @@ int sz
             i=ib*ihfbit;
             num_up=0;
             for(j=0;j<N; j++){
-              div_up = i & X->Def.Tpow[j];
-              div_up = div_up/X->Def.Tpow[j];
+              div_up = i & (1LU << j);
+              div_up = div_up/(1LU << j);
               num_up +=div_up;
             }
             all_up   = (X->Def.Nsite+1)/2;
@@ -675,18 +675,18 @@ int sz
         for(ib =0; ib<ihfbit; ib++){
           i2Sz=0;
           for(j=1; j<= irghtsite; j++){
-            i2Sz += GetLocal2Sz(j,ib, X->Def.SiteToBit, X->Def.Tpow);
+            i2Sz += GetLocal2Sz(j,ib, X->Def.SiteToBit );
           }
           list_2_1_Sz[ib]=i2Sz;
           HilbertNumToSz[i2Sz+Max2Sz]++;
         }
         jb = 0;
-        long unsigned int ilftdim=(X->Def.Tpow[X->Def.Nsite-1]*X->Def.SiteToBit[X->Def.Nsite-1])/ihfbit;
+        long unsigned int ilftdim=((1LU << (X->Def.Nsite-1))*X->Def.SiteToBit[X->Def.Nsite-1])/ihfbit;
         for(ib=0;ib<ilftdim;ib++){
           list_jb[ib]=jb;
           i2Sz=0;
           for(j=1;j<=(N-irghtsite); j++){
-            i2Sz += GetLocal2Sz(j+irghtsite,ib*ihfbit, X->Def.SiteToBit, X->Def.Tpow);
+            i2Sz += GetLocal2Sz(j+irghtsite,ib*ihfbit, X->Def.SiteToBit );
           }
           list_2_2_Sz[ib]=i2Sz;
           if((X->Def.Total2Sz- i2Sz +(int)Max2Sz)>=0 && (X->Def.Total2Sz- i2Sz) <= (int)Max2Sz){
@@ -835,10 +835,10 @@ int omp_sz(
   num_up   = 0;
   num_down = 0;
   for(j=0;j< X->Def.Nsite ;j++){
-    div_up    = i & X->Def.Tpow[2*j];
-    div_up    = div_up/X->Def.Tpow[2*j];
-    div_down  = i & X->Def.Tpow[2*j+1];
-    div_down  = div_down/X->Def.Tpow[2*j+1];
+    div_up    = i & (1LU << (2*j));
+    div_up    = div_up/(1LU << (2*j));
+    div_down  = i & (1LU << (2*j+1));
+    div_down  = div_down/(1LU << (2*j+1));
     num_up += div_up;
     num_down += div_down;
   }
@@ -854,10 +854,10 @@ int omp_sz(
       num_down =  tmp_num_down;
       
       for(j=0;j<X->Def.Nsite;j++){
-        div_up    = i & X->Def.Tpow[2*j];
-        div_up    = div_up/X->Def.Tpow[2*j];
-        div_down  = i & X->Def.Tpow[2*j+1];
-        div_down  = div_down/X->Def.Tpow[2*j+1];
+        div_up    = i & (1LU << (2*j));
+        div_up    = div_up/(1LU << (2*j));
+        div_down  = i & (1LU << (2*j+1));
+        div_down  = div_down/(1LU << (2*j+1));
         num_up += div_up;
         num_down += div_down;
       }
@@ -876,10 +876,10 @@ int omp_sz(
       num_down =  tmp_num_down;
       
       for(j=0;j<X->Def.Nsite;j++){
-        div_up    = i & X->Def.Tpow[2*j];
-        div_up    = div_up/X->Def.Tpow[2*j];
-        div_down  = i & X->Def.Tpow[2*j+1];
-        div_down  = div_down/X->Def.Tpow[2*j+1];
+        div_up    = i & (1LU << (2*j));
+        div_up    = div_up/(1LU << (2*j));
+        div_down  = i & (1LU << (2*j+1));
+        div_down  = div_down/(1LU << (2*j+1));
         num_up += div_up;
         num_down += div_down;
       }
@@ -930,10 +930,10 @@ int omp_sz_hacker(long unsigned int ib,
   num_up   = 0;
   num_down = 0;
   for(j=0;j< X->Def.Nsite ;j++){
-    div_up    = i & X->Def.Tpow[2*j];
-    div_up    = div_up/X->Def.Tpow[2*j];
-    div_down  = i & X->Def.Tpow[2*j+1];
-    div_down  = div_down/X->Def.Tpow[2*j+1];
+    div_up    = i & (1LU << (2*j));
+    div_up    = div_up/(1LU << (2*j));
+    div_down  = i & (1LU << (2*j+1));
+    div_down  = div_down/(1LU << (2*j+1));
     num_up += div_up;
     num_down += div_down;
   }
@@ -944,15 +944,15 @@ int omp_sz_hacker(long unsigned int ib,
 
   if(X->Def.iCalcModel==Hubbard){
     if(tmp_num_up <= X->Def.Nup && tmp_num_down <= X->Def.Ndown){ //do not exceed Nup and Ndown
-      ia = X->Def.Tpow[X->Def.Nup+X->Def.Ndown-tmp_num_up-tmp_num_down]-1;
+      ia = (1LU << (X->Def.Nup+X->Def.Ndown-tmp_num_up-tmp_num_down))-1;
       if(ia < X->Check.sdim){
         num_up   =  tmp_num_up;
         num_down =  tmp_num_down;
         for(j=0;j<X->Def.Nsite;j++){
-          div_up    = ia & X->Def.Tpow[2*j];
-          div_up    = div_up/X->Def.Tpow[2*j];
-          div_down  = ia & X->Def.Tpow[2*j+1];
-          div_down  = div_down/X->Def.Tpow[2*j+1];
+          div_up    = ia & (1LU << (2*j));
+          div_up    = div_up/(1LU << (2*j));
+          div_down  = ia & (1LU << (2*j+1));
+          div_down  = div_down/(1LU << (2*j+1));
           num_up   += div_up;
           num_down += div_down;
         }
@@ -968,10 +968,10 @@ int omp_sz_hacker(long unsigned int ib,
             num_up   =  tmp_num_up;
             num_down =  tmp_num_down;
             for(j=0;j<X->Def.Nsite;j++){
-              div_up    = ia & X->Def.Tpow[2*j];
-              div_up    = div_up/X->Def.Tpow[2*j];
-              div_down  = ia & X->Def.Tpow[2*j+1];
-              div_down  = div_down/X->Def.Tpow[2*j+1];
+              div_up    = ia & (1LU << (2*j));
+              div_up    = div_up/(1LU << (2*j));
+              div_down  = ia & (1LU << (2*j+1));
+              div_down  = div_down/(1LU << (2*j+1));
               num_up   += div_up;
               num_down += div_down;
             }
@@ -989,7 +989,7 @@ int omp_sz_hacker(long unsigned int ib,
   }
   else if(X->Def.iCalcModel==HubbardNConserved){
     if(tmp_num_up+tmp_num_down <= X->Def.Ne){ //do not exceed Ne
-      ia = X->Def.Tpow[X->Def.Ne-tmp_num_up-tmp_num_down]-1;
+      ia = (1LU << (X->Def.Ne-tmp_num_up-tmp_num_down))-1;
       if(ia < X->Check.sdim){
         list_1_[ja+jb]=ia+ib*ihfbit;
         list_2_1_[ia]=ja+1;
@@ -1050,10 +1050,10 @@ int omp_sz_Kondo(
   num_down = 0;
   icheck_loc=1;
   for(j=X->Def.Nsite/2; j< X->Def.Nsite ;j++){
-    div_up    = i & X->Def.Tpow[2*j];
-    div_up    = div_up/X->Def.Tpow[2*j];
-    div_down  = i & X->Def.Tpow[2*j+1];
-    div_down  = div_down/X->Def.Tpow[2*j+1];
+    div_up    = i & (1LU << (2*j));
+    div_up    = div_up/(1LU << (2*j));
+    div_down  = i & (1LU << (2*j+1));
+    div_down  = div_down/(1LU << (2*j+1));
 
     if(X->Def.LocSpn[j] == ITINERANT){
       num_up   += div_up;        
@@ -1080,10 +1080,10 @@ int omp_sz_Kondo(
       num_down =  tmp_num_down;
       icheck_loc=1;
       for(j=0;j<(X->Def.Nsite+1)/2;j++){
-        div_up    = i & X->Def.Tpow[2*j];
-        div_up    = div_up/X->Def.Tpow[2*j];
-        div_down  = i & X->Def.Tpow[2*j+1];
-        div_down  = div_down/X->Def.Tpow[2*j+1];
+        div_up    = i & (1LU << (2*j));
+        div_up    = div_up/(1LU << (2*j));
+        div_down  = i & (1LU << (2*j+1));
+        div_down  = div_down/(1LU << (2*j+1));
 
         if(X->Def.LocSpn[j] ==  ITINERANT){
           num_up   += div_up;        
@@ -1101,10 +1101,10 @@ int omp_sz_Kondo(
       }
       
       if(icheck_loc == 1 && X->Def.LocSpn[X->Def.Nsite/2] != ITINERANT && X->Def.Nsite%2==1){
-        div_up    = ia & X->Def.Tpow[X->Def.Nsite-1];
-        div_up    = div_up/X->Def.Tpow[X->Def.Nsite-1];
-        div_down  = (ib*ihfbit) & X->Def.Tpow[X->Def.Nsite];
-        div_down  = div_down/X->Def.Tpow[X->Def.Nsite];
+        div_up    = ia & (1LU << (X->Def.Nsite-1));
+        div_up    = div_up/(1LU << (X->Def.Nsite-1));
+        div_down  = (ib*ihfbit) & (1LU << (X->Def.Nsite));
+        div_down  = div_down/(1LU << (X->Def.Nsite));
         icheck_loc= icheck_loc*(div_up^div_down);
       }
       
@@ -1162,10 +1162,10 @@ int omp_sz_Kondo_hacker(
   num_down = 0;
   icheck_loc=1;
   for(j=X->Def.Nsite/2; j< X->Def.Nsite ;j++){
-    div_up    = i & X->Def.Tpow[2*j];
-    div_up    = div_up/X->Def.Tpow[2*j];
-    div_down  = i & X->Def.Tpow[2*j+1];
-    div_down  = div_down/X->Def.Tpow[2*j+1];
+    div_up    = i & (1LU << (2*j));
+    div_up    = div_up/(1LU << (2*j));
+    div_down  = i & (1LU << (2*j+1));
+    div_down  = div_down/(1LU << (2*j+1));
 
     if(X->Def.LocSpn[j] == ITINERANT){
       num_up   += div_up;        
@@ -1187,7 +1187,7 @@ int omp_sz_Kondo_hacker(
   tmp_num_down = num_down;
   if(icheck_loc ==1){
     //for(ia=0;ia<X->Check.sdim;ia++){
-    ia = X->Def.Tpow[X->Def.Nup+X->Def.Ndown-tmp_num_up-tmp_num_down]-1;
+    ia = (1LU << (X->Def.Nup+X->Def.Ndown-tmp_num_up-tmp_num_down))-1;
     //ia = 1;
     //if(ia < X->Check.sdim && ia!=0){
     //ia = snoob(ia);
@@ -1199,10 +1199,10 @@ int omp_sz_Kondo_hacker(
         num_down =  tmp_num_down;
         icheck_loc=1;
         for(j=0;j<(X->Def.Nsite+1)/2;j++){
-          div_up    = i & X->Def.Tpow[2*j];
-          div_up    = div_up/X->Def.Tpow[2*j];
-          div_down  = i & X->Def.Tpow[2*j+1];
-          div_down  = div_down/X->Def.Tpow[2*j+1];
+          div_up    = i & (1LU << (2*j));
+          div_up    = div_up/(1LU << (2*j));
+          div_down  = i & (1LU << (2*j+1));
+          div_down  = div_down/(1LU << (2*j+1));
 
           if(X->Def.LocSpn[j] ==  ITINERANT){
             num_up   += div_up;        
@@ -1220,10 +1220,10 @@ int omp_sz_Kondo_hacker(
         }
         
         if(icheck_loc == 1 && X->Def.LocSpn[X->Def.Nsite/2] != ITINERANT && X->Def.Nsite%2==1){
-          div_up    = ia & X->Def.Tpow[X->Def.Nsite-1];
-          div_up    = div_up/X->Def.Tpow[X->Def.Nsite-1];
-          div_down  = (ib*ihfbit) & X->Def.Tpow[X->Def.Nsite];
-          div_down  = div_down/X->Def.Tpow[X->Def.Nsite];
+          div_up    = ia & (1LU << (X->Def.Nsite-1));
+          div_up    = div_up/(1LU << (X->Def.Nsite-1));
+          div_down  = (ib*ihfbit) & (1LU << (X->Def.Nsite));
+          div_down  = div_down/(1LU << (X->Def.Nsite));
           icheck_loc= icheck_loc*(div_up^div_down);
         }
         
@@ -1277,10 +1277,10 @@ int omp_sz_KondoGC(
   i  = ib*ihfbit;
   icheck_loc=1;
   for(j=X->Def.Nsite/2; j< X->Def.Nsite ;j++){
-    div_up    = i & X->Def.Tpow[2*j];
-    div_up    = div_up/X->Def.Tpow[2*j];
-    div_down  = i & X->Def.Tpow[2*j+1];
-    div_down  = div_down/X->Def.Tpow[2*j+1];
+    div_up    = i & (1LU << (2*j));
+    div_up    = div_up/(1LU << (2*j));
+    div_down  = i & (1LU << (2*j+1));
+    div_down  = div_down/(1LU << (2*j+1));
     if(X->Def.LocSpn[j] !=  ITINERANT){
       if(X->Def.Nsite%2==1 && j==(X->Def.Nsite/2)){
         icheck_loc= icheck_loc;
@@ -1297,10 +1297,10 @@ int omp_sz_KondoGC(
       i=ia;
       icheck_loc =1;
       for(j=0;j<(X->Def.Nsite+1)/2;j++){
-        div_up    = i & X->Def.Tpow[2*j];
-        div_up    = div_up/X->Def.Tpow[2*j];
-        div_down  = i & X->Def.Tpow[2*j+1];
-        div_down  = div_down/X->Def.Tpow[2*j+1];
+        div_up    = i & (1LU << (2*j));
+        div_up    = div_up/(1LU << (2*j));
+        div_down  = i & (1LU << (2*j+1));
+        div_down  = div_down/(1LU << (2*j+1));
         if(X->Def.LocSpn[j] !=  ITINERANT){
           if(X->Def.Nsite%2==1 && j==(X->Def.Nsite/2)){
             icheck_loc= icheck_loc;
@@ -1312,10 +1312,10 @@ int omp_sz_KondoGC(
       }
 
       if(icheck_loc == 1 && X->Def.LocSpn[X->Def.Nsite/2] != ITINERANT && X->Def.Nsite%2==1){
-        div_up    = ia & X->Def.Tpow[X->Def.Nsite-1];
-        div_up    = div_up/X->Def.Tpow[X->Def.Nsite-1];
-        div_down  = (ib*ihfbit) & X->Def.Tpow[X->Def.Nsite];
-        div_down  = div_down/X->Def.Tpow[X->Def.Nsite];
+        div_up    = ia & (1LU << (X->Def.Nsite-1));
+        div_up    = div_up/(1LU << (X->Def.Nsite-1));
+        div_down  = (ib*ihfbit) & (1LU << (X->Def.Nsite));
+        div_down  = div_down/(1LU << (X->Def.Nsite));
         icheck_loc= icheck_loc*(div_up^div_down);
       }
       
@@ -1367,8 +1367,8 @@ int omp_sz_spin(
   i  = ib*ihfbit;
   num_up=0;
   for(j=0;j<N;j++){
-    div=i & X->Def.Tpow[j];
-    div=div/X->Def.Tpow[j];
+    div=i & (1LU << j);
+    div=div/(1LU << j);
     num_up+=div;
   }
   ja=1;
@@ -1378,8 +1378,8 @@ int omp_sz_spin(
     i=ia;
     num_up =  tmp_num_up;
     for(j=0;j<N;j++){
-      div=i & X->Def.Tpow[j];
-      div=div/X->Def.Tpow[j];
+      div=i & (1LU << j);
+      div=div/(1LU << j);
       num_up+=div;
     }
 
@@ -1431,8 +1431,8 @@ int omp_sz_spin_hacker(
   i  = ib*ihfbit;
   num_up=0;
   for(j=0;j<N;j++){
-    div=i & X->Def.Tpow[j];
-    div=div/X->Def.Tpow[j];
+    div=i & (1LU << j);
+    div=div/(1LU << j);
     num_up+=div;
   }
   ja=1;
@@ -1440,7 +1440,7 @@ int omp_sz_spin_hacker(
   
   // using hacker's delight
   if(tmp_num_up<=X->Def.Ne && (X->Def.Ne-tmp_num_up)<= X->Def.Nsite-1){ // do not exceed Ne
-    ia = X->Def.Tpow[X->Def.Ne-tmp_num_up]-1;
+    ia = (1LU << (X->Def.Ne-tmp_num_up))-1;
     if(ia<ihfbit ){          // do not exceed Ne
       list_1_[ja+jb] = ia+ib*ihfbit;
       list_2_1_[ia]  = ja+1;

@@ -1415,8 +1415,7 @@ double complex child_GC_Cis_MPI(
   double complex *tmp_v0,//!<[out] Result v0 += H v1*/,
   double complex *tmp_v1,//!<[in] v0 += H v1*/,
   unsigned long int idim_max,//!<[in] Similar to CheckList::idim_max
-  double complex *tmp_v1buf,//!<[in] buffer for wavefunction
-  unsigned long int *Tpow//!<[in] Similar to DefineList::Tpow
+  double complex *tmp_v1buf//!<[in] buffer for wavefunction
 ) {
 #ifdef MPI
   int mask2, state2, ierr, origin, bit2diff, Fsgn;
